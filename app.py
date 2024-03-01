@@ -143,30 +143,55 @@ def register_doctor():
     if not session['role'] == 'doctor':
         return jsonify({'message': 'Unauthorized'}), 401
 
-    if not data['full_name'] or not data['phone'] or not data['gender'] or not data['date_of_birth'] or not data['email'] or not data['specialization'] or not data['department_id'] or not data['medical_license_number']:
+    if Doctor.query.filter_by(doctor_id=session['user_id']).first():
+        return jsonify({'message': 'Doctor already registered'}), 400
+
+    if not data['full_name'] or not data['phone'] or not data['gender'] or not data['specialization'] or not data['medical_license_number']:
         return jsonify({'message': 'Please provide all required fields'}), 400
+
+    if data['department']:
+        department = Department.query.filter_by(
+            name=data['department']).first()
+        if not department:
+            return jsonify({'message': 'Department does not exist'}), 400
 
     new_doctor = Doctor(
         doctor_id=session['user_id'],
         full_name=data['full_name'],
         gender=data['gender'],
-        date_of_birth=data['date_of_birth'],
         email=session['email'],
         phone=data['phone'],
         specialization=data.get('specialization'),
-        department_id=data['department_id'],
         consultation_hours=data.get('consultation_hours'),
         medical_license_number=data['medical_license_number'],
         education=data.get('education'),
         experience=data.get('experience'),
         availability_status=data.get('availability_status'),
-        department=data.get('department')
+        department=department if data['department'] else None
     )
 
     db.session.add(new_doctor)
     db.session.commit()
 
-    return jsonify(new_doctor.to_dict()), 201
+    return jsonify({'message': 'Doctor registered successfully', 'doctor': new_doctor.to_dict()}), 201
+
+
+@app.route('/doctors', methods=['GET'])
+def doctors():
+    if session['role'] == 'admin':
+        doctors = Doctor.query.all()
+        doctor_data = [doctor.to_dict() for doctor in doctors]
+    elif session['role'] == 'department admin':
+        department = DepartmentAdmin.query.get(session['user_id']).department
+        doctors = department.doctors
+        doctor_data = [doctor.to_dict() for doctor in doctors]
+    elif session['role'] == 'doctor':
+        doctor = Doctor.query.get(session['user_id'])
+        doctor_data = doctor.to_dict()
+    else:
+        return jsonify({'message': 'Unauthorized'}), 401
+
+    return jsonify(doctor_data)
 
 
 if __name__ == '__main__':

@@ -59,7 +59,7 @@ class Doctor(db.Model):
         'users.user_id'), primary_key=True, nullable=False)
     full_name = db.Column(db.String(100), nullable=False)
     gender = db.Column(db.String(10), nullable=False)
-    date_of_birth = db.Column(db.Date, nullable=False)
+
     email = db.Column(db.String(100), db.ForeignKey(
         'users.email'), nullable=False)
     phone = db.Column(db.String(20), nullable=False)
@@ -70,24 +70,22 @@ class Doctor(db.Model):
     medical_license_number = db.Column(
         db.String(50), unique=True, nullable=False)
     education = db.Column(db.Text)
-    experience = db.Column(db.Integer)
+    experience = db.Column(db.String(20))
     availability_status = db.Column(db.String(20))
 
-
-# Define a method to convert the object to a dictionary
-def to_dict():
-    return {
-        'doctor_id': self.doctor_id,
-        'full_name': self.full_name,
-        'department_id': self.department_id,
-        'department': self.department.name if self.department else '',
-        'phone': self.phone,
-        'email': self.email,
-        'date_of_birth': self.date_of_birth.isoformat() if self.date_of_birth else '',
-        'specialization': self.specialization,
-        'consultation_hours': self.consultation_hours,
-        'medical_license_number': self.medical_license_number,
-        'education': self.education,
-        'experience': self.experience,
-        'availability_status': self.availability_status
-    }
+    # Define a method to convert the object to a dictionary
+    def to_dict(self):
+        return {
+            'doctor_id': self.doctor_id,
+            'full_name': self.full_name,
+            'department_id': self.department_id,
+            'department': self.department.name if self.department else '',
+            'phone': self.phone,
+            'email': self.email,
+            'specialization': self.specialization,
+            'consultation_hours': self.consultation_hours,
+            'medical_license_number': self.medical_license_number,
+            'education': self.education,
+            'experience': self.experience,
+            'availability_status': self.availability_status
+        }
