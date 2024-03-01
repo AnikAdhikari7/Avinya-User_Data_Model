@@ -2,10 +2,6 @@
 
 This is a Flask-based API for a Hospital Management System. It provides endpoints for managing users, departments, doctors, and patients.
 
-## User Data Model
-
-Visit [app.eraser.io](https://app.eraser.io/workspace/OcJt6sQCm3H3ARdcwOol?origin=share) to view the user data model.
-
 ## Postman Collection 📫
 
 A Postman collection file with all the API requests is included in the repository. You can import this file into Postman to easily test all the endpoints. You can find the Postman collection file [here](https://github.com/AnikAdhikari7/Avinya-User_Data_Model/blob/main/Avinya-User_Data_Model.postman_collection.json).
@@ -51,5 +47,9 @@ Fetches patient data. If the logged-in user is an admin, it fetches all patient 
 3. Create a `.env` file in the root directory of the project. Use the `.env.sample` as a reference for the required environment variables, including `DATABASE_URI`.
 4. Set up the database. If you're using PostgreSQL, for example, you might run `createdb your_database_name`
 5. Run the app with `python app.py`
+
+## User Data Model
+![diagram-export-3-2-2024-1_18_16-AM](https://github.com/AnikAdhikari7/Avinya-User_Data_Model/assets/90562982/9c789593-bd53-41e2-a28b-4845762ef93a)
+Visit [app.eraser.io](https://app.eraser.io/workspace/OcJt6sQCm3H3ARdcwOol?origin=share) to view the user data model.
 
 Happy coding! 💻
